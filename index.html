@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>З Днем Народження, Юлю!</title>
+    <!-- Підключення бібліотеки для конфеті -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        
+        .page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        
+        /* Синювато-блакитний фон першої сторінки */
+        #page1 {
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            z-index: 2;
+        }
+        
+        /* Малиново-бордовий фон другої сторінки */
+        #page2 {
+            background: linear-gradient(135deg, #d4145a 0%, #800020 100%);
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        /* Білий квадратик (картка першої сторінки) */
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 85%;
+            text-align: center;
+            line-height: 1.6;
+            box-sizing: border-box;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #444;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        /* Прямокутна анімована кнопка */
+        .btn {
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 0; /* Суворо прямокутна форма */
+            cursor: pointer;
+            margin-top: 25px;
+            font-weight: bold;
+            font-family: inherit;
+            animation: textureChange 1s infinite; /* Зміна текстури кожну секунду */
+        }
+        
+        /* Ключові кадри для зміни текстури/кольору кнопки */
+        @keyframes textureChange {
+            0%, 49% {
+                background-color: #800020; /* Темно-бордовий */
+                border: 2px solid #ffff00; /* Жовта рамка */
+            }
+            50%, 100% {
+                background-color: #e31837; /* Яскраво-червоний */
+                border: 2px solid #00a651; /* Зелена рамка */
+            }
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s;
+        }
+        
+        /* --- СТИЛІ ДЛЯ ДРУГОЇ СТОРІНКИ (CONSTRUCTION ZONE) --- */
+        
+        .construction-card {
+            background: white;
+            max-width: 600px;
+            width: 85%;
+            text-align: center;
+            line-height: 1.6;
+            box-sizing: border-box;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            /* Анімована рамка */
+            border: 5px solid #8B0000; 
+            animation: borderFlash 1s infinite;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Зміна кольору рамки (Темно-червоний / Помаранчевий) */
+        @keyframes borderFlash {
+            0%, 49% { border-color: #8B0000; }
+            50%, 100% { border-color: #FF8C00; }
+        }
+        
+        /* Чорно-жовта стрічка */
+        .stripe-bar {
+            height: 25px;
+            width: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                #000,
+                #000 40px,
+                #FFD700 40px,
+                #FFD700 80px
+            );
+            background-size: 160px 100%;
+            animation: slideRight 3s linear infinite; /* Повільно рухається вправо */
+        }
+        
+        @keyframes slideRight {
+            0% { background-position: 0 0; }
+            100% { background-position: 160px 0; }
+        }
+        
+        /* Сіра зона з текстом */
+        .gray-header {
+            background-color: #808080;
+            color: #222;
+            padding: 12px;
+            font-size: 18px;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        /* Основний контент на другій сторінці */
+        .construction-content {
+            padding: 40px;
+        }
+
+        #page2 p {
+            font-size: 20px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Сторінка 1: Привітання -->
+    <div id="page1" class="page">
+        <div class="card">
+            <h1>З днем народження, найкраща старосто року!</h1>
+            <p>Знову вітаю, Юлю, з твоїм успішним вступом в the best university of the entire Ukraine — НТУУ "КПІ ім. Ігоря Сікорського" 🥳</p>
+            <p>Бажаю успіху в навчанні, наснаги, здоров'я і щастя, а також великих, височезних ніг для подолання масивних гір (і довгезних рук для кращого контролю групи)</p>
+            <button class="btn" onclick="goToGift()">До подарунку >>></button>
+        </div>
+    </div>
+
+    <!-- Сторінка 2: Вікно "Construction" без подарунку -->
+    <div id="page2" class="page">
+        <div class="construction-card">
+            <!-- Рухома стрічка -->
+            <div class="stripe-bar"></div>
+            <!-- Сіра зона -->
+            <div class="gray-header">
+                Your gift is under construction
+            </div>
+            <!-- Текст -->
+            <div class="construction-content">
+                <p>Тут мав бути подарунок, але, на жаль, у мене не вдалося його зробити з об'єктивних причин. Можливо, я подарую його на поляні 16-го числа... Хто зна? Побачимо 😉</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Запуск анімації конфеті при завантаженні
+        window.onload = function() {
+            var duration = 4000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                // Запуск з лівого краю
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ffffff', '#89f7fe', '#66a6ff', '#ffd700']
+                });
+                // Запуск з правого краю
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ffffff', '#89f7fe', '#66a6ff', '#ffd700']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        };
+
+        // Функція переходу на "другу сторінку"
+        function goToGift() {
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            
+            // Ховаємо першу сторінку
+            page1.style.opacity = '0';
+            page1.style.pointerEvents = 'none';
+            
+            // Показуємо другу сторінку
+            page2.style.opacity = '1';
+            page2.style.pointerEvents = 'auto';
+            page2.style.zIndex = '3';
+        }
+    </script>
+</body>
+</html>
